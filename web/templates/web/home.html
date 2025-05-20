@@ -1,32 +1,334 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selamat Datang di Sekolah Kita</title>
+
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <style>
+    /* Reset & Base */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Ubah gradient menjadi ungu */
+      background: linear-gradient(135deg, #5D1451 0%, #9B30FF 100%);
+      color: #f0f0f0;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a {
+      color: #E0BBE4; /* ungu muda untuk link */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #D291BC;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1470&q=80')
+                  center/cover no-repeat;
+      position: relative;
+      color: #f0f0f0;
+      /* Overlay ungu semi-transparan agar teks jelas */
+      box-shadow: inset 0 0 0 1000px rgba(93, 20, 81, 0.75);
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      letter-spacing: 3px;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.7);
+    }
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      max-width: 600px;
+      font-weight: 600;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    }
+    .btn-primary {
+      background-color: #E0BBE4; /* ungu muda */
+      padding: 15px 40px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 6px 15px rgba(224, 187, 228, 0.5);
+      border: none;
+      cursor: pointer;
+      color: #5D1451; /* warna teks kontras */
+      transition: background-color 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .btn-primary:hover {
+      background-color: #D291BC;
+    }
+
+    /* Features Section */
+    .features {
+      background: #f7f0fb; /* ungu sangat terang */
+      color: #2c003e;
+      padding: 60px 20px;
+      border-radius: 20px;
+      margin: -80px auto 60px;
+      max-width: 1000px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .feature {
+      flex: 1 1 250px;
+      text-align: center;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .feature:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+    .feature-icon {
+      font-size: 48px;
+      color: #9B30FF; /* ungu cerah */
+      margin-bottom: 15px;
+    }
+    .feature-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .feature-desc {
+      font-size: 1rem;
+      line-height: 1.4;
+      color: #34495e;
+    }
+
+    /* Berita Section */
+    .berita-section {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+    }
+    .berita-section h2 {
+      font-size: 2rem;
+      margin-bottom: 25px;
+      color: #f0f0f0;
+      text-align: center;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.7);
+    }
+    .berita-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+      gap: 30px;
+    }
+    .berita-item {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .berita-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    }
+    .berita-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .berita-content {
+      padding: 15px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .berita-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #2c003e;
+    }
+    .berita-date {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .berita-excerpt {
+      font-size: 0.95rem;
+      color: #555;
+      flex-grow: 1;
+      line-height: 1.3;
+    }
+
+    /* Galeri Mini */
+    .galeri-mini {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      text-align: center;
+      color: #f0f0f0;
+    }
+    .galeri-mini h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.7);
+    }
+    .galeri-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 20px;
+    }
+    .galeri-mini-item {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .galeri-mini-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .galeri-mini-img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Footer */
+    footer {
+      background: #9B30FF;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 -4px 15px rgba(155, 48, 255, 0.6);
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .features {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow p-4 flex justify-between items-center">
-        <div class="text-xl font-bold text-blue-600">Sistem Sekolah</div>
-        <div class="space-x-4">
-            <a href="{% url 'siswa_list' %}" class="text-gray-700 hover:text-blue-500">Siswa</a>
-            <a href="{% url 'guru_list' %}" class="text-gray-700 hover:text-green-500">Guru</a>
-            <a href="{% url 'jadwal_list' %}" class="text-gray-700 hover:text-purple-500">Jadwal</a>
-            <a href="{% url 'galeri_list' %}" class="text-gray-700 hover:text-pink-500">Galeri</a>
-            <a href="{% url 'berita_list' %}" class="text-gray-700 hover:text-red-500">Berita</a>
-            <a href="{% url 'logout' %}" class="text-red-500 hover:underline">Logout</a>
-        </div>
-    </nav>
+  <section class="hero" data-aos="fade-down" data-aos-duration="1200">
+    <h1>Selamat Datang di Sekolah Kita</h1>
+    <p>Mewujudkan generasi unggul dengan pendidikan berkualitas dan teknologi modern</p>
+    <button class="btn-primary" onclick="location.href='{% url 'login' %}'">Masuk Sekarang</button>
+  </section>
 
-    <!-- Content -->
-    <div class="flex items-center justify-center h-[calc(100vh-80px)]">
-        <div class="text-center">
-            <h1 class="text-3xl font-bold mb-4">Selamat Datang, {{ request.user.username }}!</h1>
-            <p class="text-gray-600">Silakan pilih menu dari navigasi di atas.</p>
-        </div>
+  <section class="features container" data-aos="fade-up" data-aos-duration="1000">
+    <div class="feature" data-aos="flip-left" data-aos-delay="100">
+      <div class="feature-icon">📚</div>
+      <h3 class="feature-title">Kurikulum Modern</h3>
+      <p class="feature-desc">Materi pembelajaran yang selalu update sesuai kebutuhan zaman dan teknologi.</p>
     </div>
+    <div class="feature" data-aos="flip-left" data-aos-delay="200">
+      <div class="feature-icon">👩‍🏫</div>
+      <h3 class="feature-title">Pengajar Profesional</h3>
+      <p class="feature-desc">Guru-guru berpengalaman yang selalu siap membimbing dan menginspirasi siswa.</p>
+    </div>
+    <div class="feature" data-aos="flip-left" data-aos-delay="300">
+      <div class="feature-icon">🏆</div>
+      <h3 class="feature-title">Prestasi Gemilang</h3>
+      <p class="feature-desc">Siswa kami sering meraih juara di berbagai lomba akademik dan non-akademik.</p>
+    </div>
+  </section>
+
+  <section class="berita-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+    <h2>Berita Terbaru</h2>
+    <div class="berita-list">
+      {% for berita in berita_terbaru %}
+      <div class="berita-item" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+        {% if berita.gambar %}
+        <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="berita-img" />
+        {% else %}
+        <img src="https://via.placeholder.com/400x180?text=No+Image" alt="No Image" class="berita-img" />
+        {% endif %}
+        <div class="berita-content">
+          <h3 class="berita-title">{{ berita.judul }}</h3>
+          <time class="berita-date">{{ berita.tanggal|date:"d M Y" }}</time>
+          <p class="berita-excerpt">{{ berita.isi|truncatewords:25 }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p>Tidak ada berita terbaru saat ini.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="galeri-mini" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+    <h2>Galeri Foto</h2>
+    <div class="galeri-grid">
+      {% for foto in galeri|slice:":6" %}
+      <div class="galeri-mini-item" data-aos="flip-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
+        {% if foto.gambar %}
+        <img src="{{ foto.gambar.url }}" alt="{{ foto.judul }}" class="galeri-mini-img" />
+        {% else %}
+        <img src="https://via.placeholder.com/300x140?text=No+Image" alt="No Image" class="galeri-mini-img" />
+        {% endif %}
+      </div>
+      {% empty %}
+      <p>Tidak ada foto untuk galeri.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Sekolah Kita. Semua hak cipta dilindungi.
+  </footer>
+
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 900,
+      easing: 'ease-in-out',
+      once: true,
+    });
+  </script>
 
 </body>
 </html>

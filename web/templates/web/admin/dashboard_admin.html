@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Admin - {{ title }}</title>
+
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <style>
+    /* Reset & Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigation */
+    nav {
+      background: #fafafa;
+      padding: 0.8rem 2rem;
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      z-index: 1;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+    nav a:hover {
+      background-color: #e0e0e0;
+    }
+
+    /* Main Content Container */
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    /* Stats Cards */
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #ffffff;
+      flex: 1;
+      min-width: 180px;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 0.5rem;
+    }
+    .stat-card h2 {
+      font-size: 2rem;
+      margin: 0;
+      color: #2c3e50;
+    }
+    .stat-card p {
+      margin-top: 0.3rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    /* Welcome Text */
+    .welcome-text {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      background: #ffffff;
+      color: #666;
+      padding: 1rem 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      border-top: 1px solid #ddd;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      .stats {
+        flex-direction: column;
+      }
+      .stat-card {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header data-aos="fade-down" data-aos-duration="800">
+    Dashboard Admin
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav data-aos="fade-down" data-aos-delay="200" data-aos-duration="600">
+    <a href="{% url 'siswa_list' %}">Kelola Siswa</a>
+    <a href="{% url 'guru_list' %}">Kelola Guru</a>
+    <a href="{% url 'jadwal_list' %}">Kelola Jadwal</a>
+    <a href="{% url 'berita_list' %}">Kelola Berita</a>
+    <a href="{% url 'galeri_list' %}">Kelola Galeri</a>
+    <a href="{% url 'logout' %}">Logout</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Welcome Text -->
+    <div class="welcome-text" data-aos="fade-up" data-aos-delay="300" data-aos-duration="600">
+      Selamat datang, <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>!
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats">
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+        <img src="https://cdn-icons-png.flaticon.com/512/1995/1995510.png" alt="Icon Siswa" class="stat-icon" />
+        <h2>{{ siswa_count }}</h2>
+        <p>Jumlah Siswa</p>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="500">
+        <img src="https://cdn-icons-png.flaticon.com/512/1995/1995515.png" alt="Icon Guru" class="stat-icon" />
+        <h2>{{ guru_count }}</h2>
+        <p>Jumlah Guru</p>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="600">
+        <img src="https://cdn-icons-png.flaticon.com/512/3640/3640793.png" alt="Icon Jadwal" class="stat-icon" />
+        <h2>{{ jadwal_count }}</h2>
+        <p>Jumlah Jadwal</p>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="700">
+        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991102.png" alt="Icon Berita" class="stat-icon" />
+        <h2>{{ berita_count }}</h2>
+        <p>Jumlah Berita</p>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="800">
+        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910762.png" alt="Icon Galeri" class="stat-icon" />
+        <h2>{{ galeri_count }}</h2>
+        <p>Jumlah Foto Galeri</p>
+      </div>
+    </div>
+
+    <!-- Optional Descriptive Section -->
+    <div data-aos="fade-up" data-aos-delay="900" data-aos-duration="600">
+      <p class="welcome-text">Gunakan menu di atas untuk menambah, mengedit, atau menghapus data sesuai kebutuhan.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer data-aos="fade-up" data-aos-delay="1000" data-aos-duration="600">
+    © 2025 Sekolah Kita - All Rights Reserved
+  </footer>
+
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 600,
+      easing: 'ease-in-out',
+      once: true
+    });
+  </script>
+</body>
+</html>
