@@ -34,7 +34,7 @@ class JadwalSiswa(models.Model):
 class Berita(models.Model):
     judul = models.CharField(max_length=200)
     isi = models.TextField()
-    gambar = models.ImageField(upload_to='berita/', blank=True, null=True)
+    gambar = models.ImageField(upload_to='berita/')
     tanggal = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
