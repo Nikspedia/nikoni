@@ -12,76 +12,94 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f0f4f8;
-      margin: 0; padding: 20px;
+      margin: 0;
+      padding: 20px;
       color: #333;
     }
+
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       color: #007bff;
     }
+
     .berita-container {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 25px;
     }
-    @media(min-width: 600px) {
+
+    @media (min-width: 768px) {
       .berita-container {
         grid-template-columns: 1fr 1fr;
       }
     }
+
+    @media (min-width: 1024px) {
+      .berita-container {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
     .berita-item {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+      background: #fff;
+      border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
     .berita-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgb(0 0 0 / 0.15);
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
+
     .berita-image {
       width: 100%;
       height: 180px;
       object-fit: cover;
       border-bottom: 1px solid #ddd;
     }
+
     .berita-content {
-      padding: 15px;
-      flex: 1;
+      padding: 16px;
       display: flex;
       flex-direction: column;
     }
+
     .berita-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin: 0 0 10px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
       color: #222;
+      margin: 0 0 8px;
     }
+
     .berita-date {
       font-size: 0.85rem;
-      color: #888;
+      color: #999;
       margin-bottom: 10px;
     }
+
     .berita-excerpt {
-      flex: 1;
       font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 15px;
+      color: #444;
+      flex-grow: 1;
+      margin-bottom: 12px;
     }
+
     .berita-readmore {
       align-self: flex-start;
       text-decoration: none;
-      color: #007bff;
       font-weight: 600;
       font-size: 0.9rem;
+      color: #007bff;
       transition: color 0.3s ease;
     }
+
     .berita-readmore:hover {
       color: #0056b3;
     }
@@ -90,24 +108,23 @@
 <body>
 
   <h1>Daftar Berita Terbaru</h1>
-  
+
   <div class="berita-container">
     {% for berita in berita %}
-    <article class="berita-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:"100" }}">
-      {% if berita.gambar %}
-      <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="berita-image" />
-      {% else %}
-      <img src="https://via.placeholder.com/400x180?text=No+Image" alt="No Image" class="berita-image" />
-      {% endif %}
-      <div class="berita-content">
-        <h2 class="berita-title">{{ berita.judul }}</h2>
-        <time class="berita-date">{{ berita.tanggal|date:"d M Y" }}</time>
-        <p class="berita-excerpt">{{ berita.isi|truncatewords:25 }}</p>
-       
-      </div>
-    </article>
+      <article class="berita-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:"100" }}">
+        {% if berita.gambar %}
+          <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="berita-image" />
+        {% else %}
+          <img src="https://via.placeholder.com/400x180?text=No+Image" alt="No Image" class="berita-image" />
+        {% endif %}
+        <div class="berita-content">
+          <h2 class="berita-title">{{ berita.judul }}</h2>
+          <time class="berita-date">{{ berita.tanggal|date:"d M Y" }}</time>
+          <p class="berita-excerpt">{{ berita.isi|truncatewords:25 }}</p>
+        </div>
+      </article>
     {% empty %}
-    <p>Tidak ada berita tersedia.</p>
+      <p>Tidak ada berita tersedia.</p>
     {% endfor %}
   </div>
 
@@ -115,7 +132,7 @@
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({
-      duration: 800,
+      duration: 1000,
       easing: 'ease-in-out',
       once: true,
       mirror: false

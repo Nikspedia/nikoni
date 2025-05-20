@@ -67,7 +67,7 @@ def siswa_dashboard(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('web/home.html')
+    return redirect('home')
 
 
 def home(request):
