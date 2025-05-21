@@ -1,0 +1,34 @@
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Jadwal Kelas Kamu ({{ jadwal.0.kelas if jadwal else "" }})</h2>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>Hari</th>
+                <th>Jam Mulai</th>
+                <th>Jam Selesai</th>
+                <th>Mata Pelajaran</th>
+                <th>Guru</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for j in jadwal %}
+            <tr>
+                <td>{{ j.hari }}</td>
+                <td>{{ j.jam_mulai|time:"H:i" }}</td>
+                <td>{{ j.jam_selesai|time:"H:i" }}</td>
+                <td>{{ j.mapel }}</td>
+                <td>{{ j.siswa.guru if j.siswa else "-" }}</td>  {# Kalau ada field guru, sesuaikan #}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">Belum ada jadwal untuk kelas kamu.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

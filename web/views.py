@@ -8,7 +8,7 @@ from .decorators import role_required
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required, user_passes_test
-
+from django.http import HttpResponseForbidden
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -129,22 +129,32 @@ def galeri_delete(request, pk):
 
 
 # SISWA
+
+
+
+@login_required
+@role_required('admin')
 def siswa_list(request):
+    kelas_filter = request.GET.get('kelas')
     siswa = Siswa.objects.all()
-    return render(request, 'siswa_list.html', {'siswa': siswa})
+    if kelas_filter:
+        siswa = siswa.filter(kelas=kelas_filter)
+    kelas_list = Siswa.objects.values_list('kelas', flat=True).distinct()
+    return render(request, 'web/admin/siswa_list.html', {
+        'siswa': siswa,
+        'kelas_list': kelas_list,
+    })
 
-def siswa_create(request):
-    if request.method == 'POST':
-        form = SiswaForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('siswa_list')
+
+
+@login_required
+@role_required('admin')
+def siswa_manage(request, pk=None):
+    if pk:
+        siswa = get_object_or_404(Siswa, pk=pk)
     else:
-        form = SiswaForm()
-    return render(request, 'form.html', {'form': form, 'title': 'Tambah Siswa'})
+        siswa = None
 
-def siswa_update(request, pk):
-    siswa = get_object_or_404(Siswa, pk=pk)
     if request.method == 'POST':
         form = SiswaForm(request.POST, request.FILES, instance=siswa)
         if form.is_valid():
@@ -152,14 +162,23 @@ def siswa_update(request, pk):
             return redirect('siswa_list')
     else:
         form = SiswaForm(instance=siswa)
-    return render(request, 'form.html', {'form': form, 'title': 'Edit Siswa'})
 
+    return render(request, 'web/admin/siswa_manage.html', {
+        'form': form,
+        'title': 'Edit Siswa' if siswa else 'Tambah Siswa',
+        'is_update': bool(siswa)
+    })
+
+
+@login_required
+@role_required('admin')
 def siswa_delete(request, pk):
     siswa = get_object_or_404(Siswa, pk=pk)
     if request.method == 'POST':
         siswa.delete()
         return redirect('siswa_list')
     return render(request, 'confirm_delete.html', {'object': siswa, 'title': 'Hapus Siswa'})
+
 
 @login_required
 @role_required('admin')
@@ -189,19 +208,29 @@ def jadwal_delete(request, pk):
         return redirect('jadwal_list')
     return render(request, 'web/admin/confirm_delete.html', {'object': jadwal, 'title': 'Hapus Jadwal'})
 
+
 @login_required
-@role_required('siswa')
-def jadwal_siswa_view(request):
-    profile = request.user.profile
-    jadwal = JadwalSiswa.objects.filter(kelas=profile.kelas).order_by('hari', 'jam_mulai')
-    return render(request, 'web/siswa/jadwal_saya.html', {'jadwal': jadwal})
+def jadwal_view(request):
+    user = request.user
+
+    try:
+        siswa = Siswa.objects.get(user=user)
+        # Kalau siswa ditemukan → role dia 'siswa'
+        jadwal = JadwalSiswa.objects.filter(kelas=siswa.kelas).order_by('hari', 'jam_mulai')
+        template = 'web/siswa/jadwal_saya.html'
+    except Siswa.DoesNotExist:
+        # Kalau gak ditemukan → anggap admin
+        jadwal = JadwalSiswa.objects.all().order_by('hari', 'jam_mulai')
+        template = 'web/admin/jadwal_list.html'
+
+    return render(request, template, {'jadwal': jadwal})
+
 
 
 
 
 @login_required
 @role_required('admin')
-
 def berita_form(request, pk=None):
     if pk:
         berita = get_object_or_404(Berita, pk=pk)
@@ -211,14 +240,19 @@ def berita_form(request, pk=None):
         title = 'Tambah Berita'
 
     if request.method == 'POST':
-        form = BeritaForm(request.POST, instance=berita)
+        form = BeritaForm(request.POST, request.FILES, instance=berita)  # ← Diperbaiki di sini
         if form.is_valid():
             form.save()
             return redirect('berita_list')
     else:
         form = BeritaForm(instance=berita)
 
-    return render(request, 'web/admin/berita_form.html', {'form': form, 'title': title, 'berita': berita})
+    return render(request, 'web/admin/berita_form.html', {
+        'form': form,
+        'title': title,
+        'berita': berita
+    })
+
 @login_required
 @role_required('admin')
 def berita_delete(request, pk):

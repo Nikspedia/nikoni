@@ -1,42 +1,65 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Daftar Siswa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Data Siswa</title>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="container mt-4">
-    <h2>Daftar Siswa</h2>
-    <a href="{% url 'siswa_create' %}" class="btn btn-primary mb-3">Tambah Siswa</a>
-    <table class="table table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Alamat</th>
-                <th>Tanggal Lahir</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for siswa in siswas %}
-            <tr>
-                <td>{{ siswa.id }}</td>
-                <td>{{ siswa.nama }}</td>
-                <td>{{ siswa.alamat }}</td>
-                <td>{{ siswa.tanggal_lahir }}</td>
-                <td>
-                    <a href="{% url 'siswa_update' siswa.id %}" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="{% url 'siswa_delete' siswa.id %}" class="btn btn-sm btn-danger" 
-                       onclick="return confirm('Yakin mau hapus data siswa ini?');">Hapus</a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="5" class="text-center">Data siswa kosong.</td></tr>
+<body class="bg-gray-100 p-6">
+
+  <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-xl" data-aos="fade-up">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-semibold">Daftar Siswa</h2>
+      <a href="{% url 'siswa_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Tambah Siswa</a>
+    </div>
+
+    <form method="GET" class="mb-4" data-aos="fade-right">
+      <label class="block mb-2">Filter berdasarkan kelas:</label>
+      <select name="kelas" onchange="this.form.submit()" class="w-1/3 border border-gray-300 rounded-lg px-3 py-2">
+        <option value="">Semua Kelas</option>
+        {% for kelas in kelas_list %}
+        <option value="{{ kelas }}" {% if kelas == request.GET.kelas %}selected{% endif %}>{{ kelas }}</option>
         {% endfor %}
-        </tbody>
+      </select>
+    </form>
+
+    <table class="min-w-full divide-y divide-gray-200" data-aos="fade-up">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2 text-left">#</th>
+          <th class="px-4 py-2 text-left">Nama</th>
+          <th class="px-4 py-2 text-left">NIS</th>
+          <th class="px-4 py-2 text-left">Kelas</th>
+          <th class="px-4 py-2 text-left">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        {% for s in siswa %}
+        <tr>
+          <td class="px-4 py-2">{{ forloop.counter }}</td>
+          <td class="px-4 py-2">{{ s.nama }}</td>
+          <td class="px-4 py-2">{{ s.nis }}</td>
+          <td class="px-4 py-2">{{ s.kelas }}</td>
+          <td class="px-4 py-2">
+            <a href="{% url 'siswa_update' s.id %}" class="text-blue-600 hover:underline">Edit</a> |
+            <form method="POST" action="{% url 'siswa_delete' s.id %}" style="display:inline;" onsubmit="return confirm('Yakin?')">
+              {% csrf_token %}
+              <button type="submit" class="text-red-600 hover:underline">Hapus</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center py-4">Tidak ada data siswa.</td></tr>
+        {% endfor %}
+      </tbody>
     </table>
-</div>
+  </div>
+
+  <script>
+    AOS.init();
+  </script>
 </body>
 </html>

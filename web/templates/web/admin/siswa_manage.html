@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <style>
+    /* RESET */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #2c3e50;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    /* CONTAINER */
+    .container {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      max-width: 480px;
+      width: 100%;
+      padding: 2.5rem 3rem;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    /* HEADINGS */
+    h1 {
+      font-weight: 900;
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+      color: #4b0082;
+      text-align: center;
+      letter-spacing: 1.2px;
+    }
+
+    /* FORM */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #4b0082;
+      margin-bottom: 0.35rem;
+      display: block;
+      user-select: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    input[type="number"],
+    select,
+    textarea {
+      border: 2px solid #a29bfe;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 2px;
+      outline-color: transparent;
+      width: 100%;
+      font-family: inherit;
+      resize: vertical;
+      color: #2c3e50;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="file"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 8px rgba(118, 75, 162, 0.6);
+      outline-color: #764ba2;
+    }
+
+    /* ERROR MESSAGE */
+    .error {
+      font-size: 0.875rem;
+      color: #e74c3c;
+      margin-top: 0.25rem;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    /* BUTTONS */
+    .btn {
+      cursor: pointer;
+      background: linear-gradient(45deg, #764ba2, #667eea);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2rem;
+      border-radius: 9999px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      transition: background 0.4s ease;
+      align-self: center;
+      box-shadow: 0 6px 12px rgba(118, 75, 162, 0.5);
+      user-select: none;
+      text-transform: uppercase;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .btn:hover {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      box-shadow: 0 8px 20px rgba(118, 75, 162, 0.8);
+      transform: scale(1.05);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #764ba2;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      border: 2px solid #764ba2;
+      transition: background 0.3s ease, color 0.3s ease;
+      box-shadow: none;
+      margin-left: 1rem;
+      user-select: none;
+    }
+    .btn-secondary:hover {
+      background: #764ba2;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(118, 75, 162, 0.6);
+      transform: scale(1.05);
+    }
+
+    /* FLEX CONTAINER FOR BUTTONS */
+    .form-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container" data-aos="fade-up">
+    <h1>{{ title }}</h1>
+    <form method="POST" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <p class="error">{{ field.errors.0 }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <div class="form-actions">
+        <button type="submit" class="btn">Simpan</button>
+        <a href="{% url 'siswa_list' %}" class="btn-secondary">Kembali</a>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    AOS.init({ duration: 900, easing: 'ease-in-out', once: true });
+  </script>
+</body>
+</html>

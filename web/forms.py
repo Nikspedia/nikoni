@@ -11,6 +11,13 @@ class SiswaForm(forms.ModelForm):
         model = Siswa
         fields = '__all__'
 
+    def clean_nama(self):
+        nama = self.cleaned_data['nama']
+        if len(nama) < 3:
+            raise forms.ValidationError("Nama harus minimal 3 karakter")
+        return nama
+
+
 class JadwalSiswaForm(forms.ModelForm):
     class Meta:
         model = JadwalSiswa

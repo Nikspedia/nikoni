@@ -14,9 +14,9 @@ class SiswaAdmin(admin.ModelAdmin):
 
 @admin.register(JadwalSiswa)
 class JadwalSiswaAdmin(admin.ModelAdmin):
-    list_display = ('hari', 'jam_mulai', 'jam_selesai', 'mapel', 'guru', 'kelas')
+    list_display = ('hari', 'jam_mulai', 'jam_selesai', 'mapel', 'siswa', 'kelas')
     list_filter = ('hari', 'kelas', 'mapel')
-    search_fields = ('mapel', 'kelas', 'guru__nama')
+    search_fields = ('mapel', 'kelas', 'siswa__nama')
 
 @admin.register(Berita)
 class BeritaAdmin(admin.ModelAdmin):
